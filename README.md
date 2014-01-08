@@ -26,7 +26,7 @@ LGPL
 
 
 1. Install the [CN1JTar](https://github.com/shannah/CN1JTar) library into your project.
-2. Copy the [CN1OfflineMaps.cn1lib](https://rawgithub.com/shannah/CN1OfflineMaps/raw/master/dist/CN1OfflineMaps.cn1lib) file into the lib directory of your codename one project.
+2. Copy the [CN1OfflineMaps.cn1lib](https://raw.github.com/shannah/CN1OfflineMaps/raw/master/dist/CN1OfflineMaps.cn1lib) file into the lib directory of your codename one project.
 3. Right click on your project in the project explorer (if using Netbeans) and click "Refresh Libs".
 
 
