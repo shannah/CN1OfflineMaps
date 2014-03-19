@@ -54,6 +54,81 @@ public class MBTilesProvider extends TiledProvider {
     private Map<String,Image> cache = new HashMap<String,Image>();
     
     
+    private static class UnclosableInputStream extends InputStream {
+
+        final InputStream s;
+        
+        public UnclosableInputStream(InputStream s){
+            this.s = s;
+        }
+
+        @Override
+        public int available() throws IOException {
+            return s.available();
+        }
+
+        @Override
+        public int read(byte[] b) throws IOException {
+            return s.read(b);
+        }
+
+        @Override
+        public synchronized void reset() throws IOException {
+            s.reset();
+        }
+
+        @Override
+        public long skip(long n) throws IOException {
+            return s.skip(n);
+        }
+
+        @Override
+        public synchronized void mark(int readlimit) {
+             s.mark(readlimit);
+        }
+
+        @Override
+        public boolean markSupported() {
+            return s.markSupported();
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            return s.read(b, off, len); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public int hashCode() {
+            return s.hashCode(); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public String toString() {
+            return s.toString(); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return s.equals(obj); //To change body of generated methods, choose Tools | Templates.
+        }
+
+      
+        
+        
+        @Override
+        public int read() throws IOException {
+            return s.read();
+        }
+
+        @Override
+        public void close() throws IOException {
+            
+        }
+        
+        
+        
+    }
+    
     
     private static String nameFromPath(String path){
         String dbName = path;
@@ -73,9 +148,7 @@ public class MBTilesProvider extends TiledProvider {
         
         InputStream is = null;
         try {
-            Log.p("Creating resource stream for "+path);
             is = Display.getInstance().getResourceAsStream(null, path);
-            Log.p("Resource stream created");
             return create(dbName, is);
         } finally {
             try {
@@ -114,6 +187,7 @@ public class MBTilesProvider extends TiledProvider {
             cacheId = StringUtil.replaceAll(cacheId, ".", "_");
             cacheId = StringUtil.replaceAll(cacheId, "?", "_");
             cacheId = StringUtil.replaceAll(cacheId, "&", "_");
+            //cacheId = StringUtil.replaceAll(cacheId, ":", "_");
             return cacheId;
     }
     
@@ -126,17 +200,14 @@ public class MBTilesProvider extends TiledProvider {
         TarEntry entry = null;
         byte[] buf = new byte[8192];
         int count = -1;
-        //Log.p("About to loop through entries");
         while ( (entry = tis.getNextEntry()) != null ){
-            //Log.p("In entry "+entry);
             OutputStream sos = null;
             String cacheId = sanitizeCacheId("cn1tiles_"+name+":"+entry.getName());
             
             
             try {
-                //Log.p("Writing cache id "+cacheId);
                 if ( cacheId.endsWith("_png")){
-                    StorageImage.create(cacheId, tis, -1, -1);
+                    StorageImage.create(cacheId, new UnclosableInputStream(tis), -1, -1);
                 } else {
                     sos = Storage.getInstance().createOutputStream(cacheId);
                     while ( (count = tis.read(buf)) != -1 ){
@@ -148,7 +219,10 @@ public class MBTilesProvider extends TiledProvider {
             } finally {
                 try {
                     sos.close();
-                } catch ( Exception ex){}
+                    
+                } catch ( Exception ex){
+                   
+                }
             }
         }
         
