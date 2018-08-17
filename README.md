@@ -1,4 +1,4 @@
-#Codename Offline Maps Provider
+# Codename Offline Maps Provider
 
 
 
@@ -7,22 +7,22 @@ This library includes a MapProvider that works with the Codename One MapComponen
 
 <center><img src="screenshots/ios_ss.jpg" width="300"/></center>
 
-##License
+## License
 
 LGPL
 
-##Features
+## Features
 
 * Should work on all CN1 platforms (J2ME, iOS, Android, BlackBerry, and Windows Phone).
 * Works with the Codename One MapComponent
 * Supports the `CN1Tiles` format for importing map data.  Note:  This format was created specifically for use by this module, however, you can use the CN1TileConverter tool to convert the more common `MBTiles` format into a `CN1Tiles` file that can be used with this module.
 
-##Dependencies
+## Dependencies
 
 1. [CN1JTar Library](https://github.com/shannah/CN1JTar)
 
 
-##Installation
+## Installation
 
 
 1. Install the [CN1JTar](https://github.com/shannah/CN1JTar) library into your project.
@@ -30,7 +30,7 @@ LGPL
 3. Right click on your project in the project explorer (if using Netbeans) and click "Refresh Libs".
 
 
-##Code Example
+## Code Example
 
 ~~~
 MBTilesProvider provider; 
@@ -64,7 +64,7 @@ hi.addComponent(BorderLayout.CENTER, map);
 hi.show();
 ~~~
 
-##How to Create an Offline Map
+## How to Create an Offline Map
 
 This libray is only useful if you are able to create the `cn1tiles` file to begin with.  In order to do this you will need the following tools:
 
